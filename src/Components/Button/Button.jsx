@@ -18,7 +18,7 @@ const Button = ({
           : hoverColor
           ? `hover:bg-${hoverColor}`
           : "hover:bg-gray-100"
-      }  cursor-pointer font-[500] overflow-hidden`}>
+      }   font-[500] overflow-hidden`}>
       <span
         className={`${
           textHover
@@ -26,10 +26,12 @@ const Button = ({
             : textColor
             ? `text-${textColor}`
             : "text-black/80"
-        } rounded-full max-w-[1.6rem]`}>
+        } rounded-full max-w-[1.6rem] cursor-pointer`}>
         {icon}
       </span>
-      <span className="capitalize flex-1 text-black/80">{title} </span>
+      <span className="capitalize flex-1 text-black/80 cursor-pointer">
+        {title}
+      </span>
     </Link>
   );
 };

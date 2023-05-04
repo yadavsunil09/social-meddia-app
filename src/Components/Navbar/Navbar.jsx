@@ -18,10 +18,9 @@ const Navbar = ({ links }) => {
             <Link
               to={item.linkname}
               key={index}
-              className={`text-white ${
-                location.pathname === item.linkname
-                  ? " border-red-700 border-b-[3px] rounded-none text-red-700 hover:bg-transparent transition-all linear duration-100"
-                  : ""
+              className={` ${
+                location.pathname === item.linkname &&
+                " border-red-700 border-b-[3px] rounded-none text-red-700 hover:bg-transparent transition-all linear duration-100"
               } cursor-pointer rounded-md hover:bg-red-700 h-[2.5rem] w-[3.5rem] font-[400] font-sans uppercase text-lg flex justify-center items-center`}>
               {item.label}
             </Link>

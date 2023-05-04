@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../Button/Button";
 import image from "../../assets/react.svg";
-import { AiFillLike ,BiComment} from "react-icons/all";
+import { AiOutlineLike, BiComment } from "react-icons/all";
 const PostContainer = () => {
   return (
     <div className="bg-white py-3 rounded-lg shadow-sm border-[1px] border-gray-100 drop-shadow-sm w-[80%] min-w-[37rem] h-[35rem]">
@@ -26,8 +26,18 @@ const PostContainer = () => {
       </p>
       {/* reaction section */}
       <p className="border-t-[1px] border-t-gray-200 flex justify-center items-center">
-        <Button disable={true} icon={<AiFillLike size={25} />} title={"Like"} textHover={true} textColor={"red-900"}/>
-        <Button disable={true} icon={<BiComment size={25} />} title={"Comment"} />
+        <Button
+          disable={true}
+          icon={<AiOutlineLike size={25} className="hover:text-blue-500"/>}
+          title={"Like"}
+          textHover={true}
+          textColor={"red-900"}
+        />
+        <Button
+          disable={true}
+          icon={<BiComment size={25} className="hover:text-green-300"/>}
+          title={"Comment"}
+        />
       </p>
     </div>
   );
