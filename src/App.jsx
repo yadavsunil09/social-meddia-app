@@ -1,27 +1,27 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import HomePage from "./Pages/HomePage";
 import ProfilePage from "./Pages/ProfilePage";
+import { UserAuthContextProvider } from "./context/UserAuthContext";
 import {
   BrowserRouter,
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
 import HomeLayout from "./Layout/HomeLayout";
-import Login from "./Pages/Login";
-import SignUp from "./Pages/SignUp";
+import LoginPage from "./Pages/LoginPage";
+import SignUpPage from "./Pages/SignUpPage";
 function App() {
   const router = createBrowserRouter([
     { path: "/", element: <HomePage /> },
     { path: "/profile", element: <ProfilePage /> },
-    { path: "/login", element: <Login /> },
-    { path: "/signup", element: <SignUp /> },
+    { path: "/login", element: <LoginPage /> },
+    { path: "/signup", element: <SignUpPage /> },
   ]);
   return (
     <RouterProvider router={router}>
-      <HomeLayout />
+      <UserAuthContextProvider>
+        <HomeLayout />
+      </UserAuthContextProvider>
     </RouterProvider>
   );
 }

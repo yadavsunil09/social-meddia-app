@@ -2,15 +2,19 @@ import React from "react";
 import fb from "../firebase";
 import * as yup from "yup";
 import { useFormik } from "formik";
-const Login = () => {
+import { Link } from "react-router-dom";
+const LoginPage = () => {
   let schema = yup.object().shape({
     email: yup.string().email().required("Email is required."),
     password: yup.string().required("Password is required."),
   });
   const formik = useFormik({
-    initialValues: "",
+    initialValues: {
+      email: "",
+      password: "",
+    },
     onSubmit: () => {
-      alert("sub");
+      console.log(formik.values);
     },
     validationSchema: schema,
   });
@@ -30,9 +34,15 @@ const Login = () => {
             name="email"
             id="email"
             placeholder={
-              formik.errors.email ? `${formik.errors.email}` : `Email Address`
+              formik.touched.email && formik.errors.email
+                ? `${formik.errors.email}`
+                : `Email Address`
             }
-            className="border-[1px] border-gray-400 w-full h-[2.5rem] rounded-[0.2rem] px-4 focus:outline-none focus:border-gray-900"
+            className={`border-[1px] border-gray-400 w-full h-[2.5rem] ${
+              formik.touched.email && formik.errors.email
+                ? "placeholder-red-700 border-red-400"
+                : "placeholder-black/80"
+            } rounded-[0.2rem] px-4 focus:outline-none focus:border-gray-900`}
           />
         </label>
         <label htmlFor="password" className="w-full">
@@ -42,10 +52,17 @@ const Login = () => {
             type="password"
             name="password"
             id="password"
+            maxLength={15}
             placeholder={
-              formik.errors.password ? `${formik.errors.password}` : `Password`
+              formik.touched.password && formik.errors.password
+                ? `${formik.errors.password}`
+                : `Password`
             }
-            className="border-[1px] border-gray-400 w-full h-[2.5rem] rounded-[0.2rem] px-4 focus:outline-none focus:border-gray-900"
+            className={`border-[1px] border-gray-400 w-full h-[2.5rem] ${
+              formik.touched.password && formik.errors.password
+                ? "placeholder-red-700 border-red-400"
+                : "placeholder-black/80"
+            } rounded-[0.2rem] px-4 focus:outline-none focus:border-gray-900`}
           />
         </label>
         <button
@@ -59,15 +76,15 @@ const Login = () => {
         </button>
         <div className="flex justify-center items-center gap-1">
           <span>Don't have an account?</span>
-          <a
-            href="/signup"
+          <Link
+            to="/signup"
             className=" text-blue-900 hover:underline capitalize">
             sign up
-          </a>
+          </Link>
         </div>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;
