@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../Logo/Logo";
 import { Link, useLocation } from "react-router-dom";
 import { TbBrandWebflow } from "react-icons/all";
+import Modal from "../Modal/Modal";
 const Navbar = ({ links }) => {
   const location = useLocation();
+  const [modalState, setModalState] = useState(false);
+  const handleModalToggle = () => {
+    setModalState(!modalState);
+  };
+
+  function handleModalOnClick(tag) {
+    if (tag == "post") {
+      setModalState(true);
+    }
+  }
   return (
     <nav className="bg-[#010101]/80 h-[3.1rem] flex justify-between items-center px-3 fixed z-10 w-full backdrop-blur-[1px]">
       <div className=" w-30">
@@ -16,6 +27,7 @@ const Navbar = ({ links }) => {
         {links.map((item, index) => {
           return (
             <Link
+              onClick={()=>handleModalOnClick(item?.tag)}
               to={item.linkname}
               key={index}
               className={` ${
@@ -27,6 +39,7 @@ const Navbar = ({ links }) => {
           );
         })}
       </div>
+      <Modal modalState={modalState} changeModalState={handleModalToggle} />
     </nav>
   );
 };
