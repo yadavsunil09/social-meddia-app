@@ -17,7 +17,7 @@ const HomeLayout = ({ children, title }) => {
   ];
 
   return (
-    <div className="flex flex-col justify-start items-center">
+    <div className="flex flex-col justify-start items-center  bg-[#fafafa]">
       <Navbar links={Links} />
       <section className="grid text-black relative top-[3.1rem] h-screen w-full order-2 bg-[#fafafa]">
         <div className="hidden md:flex w-[20%] fixed left-0 top-[3.1rem] h-full p-5 ">
