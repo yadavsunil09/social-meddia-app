@@ -1,12 +1,14 @@
 import React from "react";
 import { useAuth } from "../context/UserAuthContext";
-import { Navigate, Route, redirect } from "react-router-dom";
-const ProtectedRoute = ({ component, ...rest }) => {
+import { useNavigate, Route, redirect } from "react-router-dom";
+
+const ProtectedRoute = ({ children }) => {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   if (!currentUser) {
-    return <Navigate to="/" />;
+    return navigate("/login");
   }
-  return component;
+  return children;
 };
 
 export default ProtectedRoute;

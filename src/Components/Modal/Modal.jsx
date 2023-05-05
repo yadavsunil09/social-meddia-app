@@ -1,11 +1,49 @@
 import React, { useState } from "react";
 import { RxCross2, IoImagesOutline, BsEmojiHeartEyes } from "react-icons/all";
+import { useAuth } from "../../context/UserAuthContext";
+import { storage, db } from "../../firebase";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import firebase from "firebase/compat/app";
+import { getFirestore, collection, setDoc ,doc } from "firebase/firestore";
 const Modal = ({ modalState, changeModalState }) => {
+  const { currentUser } = useAuth();
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState(null);
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const handleClick = () => {
     setTimeout(() => {
       changeModalState();
     }, 400);
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Upload image to Firebase Storage
+    const postCollection = collection(db, "posts");
+    if (image) {
+      const imageRef = ref(storage, `images/${currentUser.uid}/${image.name}`);
+      await uploadBytes(imageRef, image);
+      const imageUrl = await getDownloadURL(imageRef);
+      // Save post details to Firestore
+      const newPost = doc(postCollection);
+      await setDoc(newPost, {
+        content: content,
+        imageUrl: imageUrl,
+        userId: currentUser.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+    // Reset form fields
+    setContent("");
+    setImage(null);
+  };
+
   return (
     <div
       className={`${
@@ -32,7 +70,9 @@ const Modal = ({ modalState, changeModalState }) => {
             <RxCross2 size={20} />
           </span>
         </p>
-        <form className="flex flex-col justify-center items-center w-full gap-5">
+        <form
+          className="flex flex-col justify-center items-center w-full gap-5"
+          onSubmit={handleSubmit}>
           <textarea
             name="postDetails"
             id="post"
@@ -40,7 +80,8 @@ const Modal = ({ modalState, changeModalState }) => {
             rows="8"
             maxLength={200}
             placeholder="What's on your mind?"
-            className="bg-blue-100/10 w-full text-[17px] border-[1px] resize-none focus:outline-blue-200 p-2 border-gray-200 rounded-md"></textarea>
+            className="bg-blue-100/10 w-full text-[17px] border-[1px] resize-none focus:outline-blue-200 p-2 border-gray-200 rounded-md"
+            onChange={handleContentChange}></textarea>
           <div className="border-[1px] border-gray-200 rounded-md w-full h-[3.5rem] flex justify-start items-center px-10 gap-10">
             <span className="font-[500] flex-1 min-w-[10rem]">
               Add to your post
@@ -49,7 +90,13 @@ const Modal = ({ modalState, changeModalState }) => {
               <span>
                 <IoImagesOutline size={27} className="text-green-700" />
               </span>
-              <input type="file" name="image" id="image" hidden />
+              <input
+                type="file"
+                name="image"
+                id="image"
+                hidden
+                onChange={handleImageChange}
+              />
             </label>
             <span>
               <BsEmojiHeartEyes size={25} className="text-yellow-400" />

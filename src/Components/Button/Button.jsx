@@ -8,11 +8,17 @@ const Button = ({
   hoverColor,
   textColor,
   textHover,
+  border,
+  md,
 }) => {
   return (
     <Link
-      to={linkname ? linkname : "/"}
-      className={`hover:border-transparent min-h-[3rem] max-h-[4rem] w-auto rounded-md flex justify-start px-2 gap-x-5 items-center ${
+      to={linkname && linkname}
+      className={` ${
+        border && "border-[1px] border-gray-200 hover:border-gray-200"
+      } hover:border-transparent  min-h-[3rem] max-h-[4rem] w-auto ${
+        md && "max-w-[8rem] min-h-[2.5rem]"
+      } rounded-md flex justify-start px-2 gap-x-5 items-center ${
         disable
           ? "hover:bg-none"
           : hoverColor

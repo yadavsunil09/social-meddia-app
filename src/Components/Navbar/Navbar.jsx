@@ -6,6 +6,7 @@ import Modal from "../Modal/Modal";
 const Navbar = ({ links }) => {
   const location = useLocation();
   const [modalState, setModalState] = useState(false);
+
   const handleModalToggle = () => {
     setModalState(!modalState);
   };
@@ -27,7 +28,7 @@ const Navbar = ({ links }) => {
         {links.map((item, index) => {
           return (
             <Link
-              onClick={()=>handleModalOnClick(item?.tag)}
+              onClick={() => handleModalOnClick(item?.tag)}
               to={item.linkname}
               key={index}
               className={` ${

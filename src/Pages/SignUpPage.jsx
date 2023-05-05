@@ -23,7 +23,6 @@ const SignUpPage = () => {
     },
     onSubmit: async (e, { resetForm }) => {
       setLoading(true);
-      console.log(formik.values.email);
       await signup(formik.values.email, formik.values.password)
         .then(() => {
           setLoading(false);
@@ -56,7 +55,7 @@ const SignUpPage = () => {
             // resetForm();
 
             setLoading(false);
-            navigate("/");
+            navigate("/createProfile");
           }, 1000);
         })
         .catch((error) => {
