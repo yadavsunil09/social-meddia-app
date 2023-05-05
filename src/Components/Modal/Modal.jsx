@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import { RxCross2, IoImagesOutline, BsEmojiHeartEyes } from "react-icons/all";
-const Modal = () => {
-  const [openModal, setOpenModal] = useState(true);
+const Modal = ({ modalState, changeModalState }) => {
   const handleClick = () => {
     setTimeout(() => {
-      setOpenModal(!openModal);
+      changeModalState();
     }, 400);
   };
   return (
     <div
-      onClick={() => {
-        handleClick();
-      }}
       className={`${
-        openModal === false && "hidden"
-      } h-screen bg-black/30 backdrop-blur-sm z-10 fixed w-full left-0 top-0 flex justify-center items-center`}>
+        modalState === false && "hidden"
+      } h-screen fixed w-full left-0 top-0 flex justify-center items-center`}>
       <div
-        className={`bg-white py-3 rounded-lg shadow-md border-[1px] border-gray-100 drop-shadow-sm md:min-w-[35rem] h-[28rem] w-[30rem] md:h-[28rem] p-10 gap-5 flex flex-col`}>
+        onClick={() => {
+          handleClick();
+        }}
+        className={`${
+          modalState === false && "hidden"
+        } h-screen bg-black/60 z-[10] fixed w-full left-0 top-0 flex justify-center items-center`}></div>
+      <div
+        className={`bg-white py-3 rounded-lg z-[100] shadow-md border-[1px] border-gray-100 drop-shadow-sm md:min-w-[35rem] h-[28rem] w-[30rem] md:h-[28rem] p-10 gap-5 flex flex-col`}>
         <p className="flex justify-center items-center p-1 border-b-[1px] border-b-gray-200 text-black/90 font-[500] text-[19px]">
           <span className="flex-1 flex items-center justify-center">
             Create Post
@@ -25,7 +28,7 @@ const Modal = () => {
             onClick={() => {
               handleClick();
             }}
-            className="cursor-pointer hover:bg-gray-200 bg-gray-100 h-[1.7rem] w-[1.7rem] flex justify-center items-center rounded-full">
+            className="cursor-pointer hover:bg-gray-300 bg-gray-200 h-[1.7rem] w-[1.7rem] flex justify-center items-center rounded-full">
             <RxCross2 size={20} />
           </span>
         </p>

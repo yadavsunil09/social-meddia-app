@@ -4,7 +4,7 @@ import image from "../../assets/react.svg";
 import { AiOutlineLike, BiComment } from "react-icons/all";
 const PostContainer = ({ userDetail, postDescription }) => {
   return (
-    <div className="bg-white py-3 rounded-lg shadow-md border-[1px] border-gray-100 drop-shadow-sm md:w-[80%] min-w-[30rem] w-[60%] md:min-w-[37rem] md:h-[35rem]">
+    <div className="bg-white py-3 rounded-lg shadow-md border-[1px] border-gray-100 drop-shadow-sm md:w-[80%] min-w-[30rem] w-[60%] md:min-w-[37rem] md:h-[37rem]">
       {/* post details -- username --image */}
       <p className="flex justify-start items-center h-10 overflow-hidden gap-3 p-3">
         <Button
@@ -20,7 +20,7 @@ const PostContainer = ({ userDetail, postDescription }) => {
         <img src={image} alt="" className="h-full w-full object-contain" />
       </p>
       {/* reaction section */}
-      <p className="border-t-[1px] border-t-gray-200 flex justify-center items-center">
+      <p className="border-t-[1px] border-t-gray-200 flex justify-center items-center ">
         <Button
           disable={true}
           icon={<AiOutlineLike size={25} className="hover:text-blue-500" />}

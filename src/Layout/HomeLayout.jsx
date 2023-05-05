@@ -11,9 +11,9 @@ import Button from "../Components/Button/Button";
 import LeftSider from "../Components/SiderComponents/LeftSider";
 const HomeLayout = ({ children, title }) => {
   const Links = [
-    { label: <AiFillHome size={25} />, linkname: "/" },
-    { label: <MdPostAdd size={28} />, linkname: "" },
-    { label: <FaUserAlt size={25} />, linkname: "/profile" },
+    { label: <AiFillHome size={25} />, linkname: "/", tag: "" },
+    { label: <MdPostAdd size={28} />, linkname: " ", tag: "post" },
+    { label: <FaUserAlt size={25} />, linkname: "/profile", tag: "" },
   ];
 
   return (
