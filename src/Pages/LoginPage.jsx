@@ -1,29 +1,95 @@
-import React from "react";
-import fb from "../firebase";
+import React, { useState } from "react";
 import { useAuth } from "../context/UserAuthContext";
-
+import { CgSpinner } from "react-icons/all";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
-// const { login } = useAuth();
+import { Link, useNavigate } from "react-router-dom";
+import { toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const LoginPage = () => {
+  const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
   let schema = yup.object().shape({
     email: yup.string().email().required("Email is required."),
     password: yup.string().required("Password is required."),
   });
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: async () => {
-      console.log(formik.values);
-      try {
-        // await login(formik.values.email, formik.values.password);
-      } catch (err) {
-        console.log("error message", err.message);
-      }
+    onSubmit: async (e) => {
+      setLoading(true);
+      await login(formik.values.email, formik.values.password)
+        .then(() => {
+          setLoading(false);
+          setTimeout(() => {
+            navigate("/");
+            const toastId = "alert";
+            const existingToast = toast.isActive(toastId);
+
+            if (existingToast) {
+              toast.update(toastId, {
+                render: "Welcome to Wtalks.",
+                autoClose: 1000,
+              });
+            } else {
+              toast.success("Welcome to Wtalks.", {
+                toastId: toastId,
+                className: "toast-center",
+                position: "bottom-center",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                closeButton: false,
+                transition: Slide,
+                icon: false,
+              });
+            }
+
+            setLoading(false);
+          }, 1000);
+        })
+        .catch((error) => {
+          console.log("Signup error:", error.message);
+          setLoading(false);
+          setTimeout(() => {
+            const toastId = "alert";
+            const existingToast = toast.isActive(toastId);
+
+            if (existingToast) {
+              toast.update(toastId, {
+                render: "Unable to Sign in.",
+                autoClose: 1000,
+              });
+            } else {
+              toast.error("Unable to Sign in.", {
+                toastId: toastId,
+                className: "toast-center",
+                position: "bottom-center",
+                autoClose: 1000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                closeButton: false,
+                transition: Slide,
+                icon: false,
+              });
+            }
+
+            setLoading(false);
+          }, 1000);
+        });
     },
+
     validationSchema: schema,
   });
   return (
@@ -79,8 +145,12 @@ const LoginPage = () => {
             formik.handleSubmit();
           }}
           type="submit"
-          className="border-[1px] border-gray-400 bg-red-700 hover:border-white hover:bg-red-800  text-white text-[20px] font-[600] w-full h-[2.5rem] rounded-[0.2rem] px-4">
-          Login
+          className="border-[1px] border-gray-400 flex justify-center items-center bg-red-700 hover:border-white hover:bg-red-800  text-white text-[20px] font-[600] w-full h-[2.5rem] rounded-[0.2rem] px-4">
+          {loading ? (
+            <CgSpinner size={28} className="animate-spin duration-100" />
+          ) : (
+            " Login "
+          )}
         </button>
         <div className="flex justify-center items-center gap-1">
           <span>Don't have an account?</span>
