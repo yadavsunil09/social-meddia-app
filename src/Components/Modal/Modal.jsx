@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { RxCross2, IoImagesOutline, BsEmojiHeartEyes } from "react-icons/all";
 import { useAuth } from "../../context/UserAuthContext";
-import { firestore, storage, storageRef } from "../../firebase";
-
+import { storage, db } from "../../firebase";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import firebase from "firebase/compat/app";
+import { getFirestore, collection, setDoc ,doc } from "firebase/firestore";
 const Modal = ({ modalState, changeModalState }) => {
   const { currentUser } = useAuth();
   const [content, setContent] = useState("");
@@ -22,16 +24,22 @@ const Modal = ({ modalState, changeModalState }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const imageRef = storageRef.child(image.name);
-    await imageRef.put(image);
-    const imageUrl = await imageRef.getDownloadURL();
-    const postsRef = firestore.collection("posts");
-    await postsRef.add({
-      content,
-      imageUrl,
-      userId: currentUser.uid,
-      createdAt: new Date(),
-    });
+    // Upload image to Firebase Storage
+    const postCollection = collection(db, "posts");
+    if (image) {
+      const imageRef = ref(storage, `images/${currentUser.uid}/${image.name}`);
+      await uploadBytes(imageRef, image);
+      const imageUrl = await getDownloadURL(imageRef);
+      // Save post details to Firestore
+      const newPost = doc(postCollection);
+      await setDoc(newPost, {
+        content: content,
+        imageUrl: imageUrl,
+        userId: currentUser.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+    // Reset form fields
     setContent("");
     setImage(null);
   };

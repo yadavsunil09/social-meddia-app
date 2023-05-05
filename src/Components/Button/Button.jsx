@@ -17,7 +17,7 @@ const Button = ({
       className={` ${
         border && "border-[1px] border-gray-200 hover:border-gray-200"
       } hover:border-transparent  min-h-[3rem] max-h-[4rem] w-auto ${
-        md && "w-[7.5rem] min-h-[2.5rem]"
+        md && "max-w-[8rem] min-h-[2.5rem]"
       } rounded-md flex justify-start px-2 gap-x-5 items-center ${
         disable
           ? "hover:bg-none"

@@ -55,7 +55,7 @@ const SignUpPage = () => {
             // resetForm();
 
             setLoading(false);
-            navigate("/");
+            navigate("/createProfile");
           }, 1000);
         })
         .catch((error) => {

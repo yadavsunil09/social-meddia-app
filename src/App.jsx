@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomeLayout from "./Layout/HomeLayout";
 import LoginPage from "./Pages/LoginPage";
 import SignUpPage from "./Pages/SignUpPage";
+import CreateProfile from "./Pages/CreateProfile";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/createProfile" element={<CreateProfile />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
