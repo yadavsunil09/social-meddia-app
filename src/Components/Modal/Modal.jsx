@@ -28,7 +28,7 @@ const Modal = ({ modalState, changeModalState }) => {
             onClick={() => {
               handleClick();
             }}
-            className="cursor-pointer hover:bg-gray-200 bg-gray-100 h-[1.7rem] w-[1.7rem] flex justify-center items-center rounded-full">
+            className="cursor-pointer hover:bg-gray-300 bg-gray-200 h-[1.7rem] w-[1.7rem] flex justify-center items-center rounded-full">
             <RxCross2 size={20} />
           </span>
         </p>

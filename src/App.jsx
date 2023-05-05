@@ -1,7 +1,7 @@
 import "./App.css";
 import HomePage from "./Pages/HomePage";
 import ProfilePage from "./Pages/ProfilePage";
-import { UserAuthContextProvider } from "./context/UserAuthContext";
+import { AuthProvider } from "./context/UserAuthContext";
 import {
   BrowserRouter,
   RouterProvider,
@@ -18,11 +18,11 @@ function App() {
     { path: "/signup", element: <SignUpPage /> },
   ]);
   return (
-    <RouterProvider router={router}>
-      <UserAuthContextProvider>
+    <AuthProvider>
+      <RouterProvider router={router}>
         <HomeLayout />
-      </UserAuthContextProvider>
-    </RouterProvider>
+      </RouterProvider>
+    </AuthProvider>
   );
 }
 

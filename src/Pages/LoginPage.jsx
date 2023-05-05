@@ -5,7 +5,7 @@ import { useAuth } from "../context/UserAuthContext";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
-const { logIn } = useAuth();
+// const { login } = useAuth();
 const LoginPage = () => {
   let schema = yup.object().shape({
     email: yup.string().email().required("Email is required."),
@@ -16,10 +16,10 @@ const LoginPage = () => {
       email: "",
       password: "",
     },
-    onSubmit: () => {
+    onSubmit: async () => {
       console.log(formik.values);
       try {
-        logIn(formik.values.email, formik.values.password);
+        // await login(formik.values.email, formik.values.password);
       } catch (err) {
         console.log("error message", err.message);
       }

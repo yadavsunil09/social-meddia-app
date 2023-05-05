@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useAuth } from "../context/UserAuthContext";
 const SignUpPage = () => {
-  const { signUp } = useAuth();
+  const { signup } = useAuth();
   let schema = yup.object().shape({
     name: yup.string().required("Username is required"),
     email: yup.string().email().required("Email is required."),
@@ -17,11 +17,13 @@ const SignUpPage = () => {
     },
     onSubmit: (e) => {
       console.log(formik.values.email);
-      try {
-       signUp(formik.values.email, formik.values.password);
-      } catch (err) {
-        console.log("error message", err.message);
-      }
+      signup(formik.values.email, formik.values.password)
+        .then(() => {
+          console.log("Signup successful!");
+        })
+        .catch((error) => {
+          console.log("Signup error:", error.message);
+        });
     },
 
     validationSchema: schema,
