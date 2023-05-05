@@ -1,5 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage ,ref} from "firebase/storage";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDsT_JJwO8-Gh38RbcX5BeH6WaxnehNujY",
   authDomain: "social-media-app-457c7.firebaseapp.com",
@@ -12,5 +15,14 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// get the firestore instance
+export const firestore = getFirestore(app);
+// get the storage instance
+export const storage = getStorage(app);
+
+// Use the storage service
+export const storageRef = ref(storage);
+
 export const auth = getAuth(app);
 export default app;

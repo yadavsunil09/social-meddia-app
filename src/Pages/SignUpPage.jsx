@@ -23,7 +23,6 @@ const SignUpPage = () => {
     },
     onSubmit: async (e, { resetForm }) => {
       setLoading(true);
-      console.log(formik.values.email);
       await signup(formik.values.email, formik.values.password)
         .then(() => {
           setLoading(false);

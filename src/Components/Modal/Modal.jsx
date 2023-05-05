@@ -1,11 +1,41 @@
 import React, { useState } from "react";
 import { RxCross2, IoImagesOutline, BsEmojiHeartEyes } from "react-icons/all";
+import { useAuth } from "../../context/UserAuthContext";
+import { firestore, storage, storageRef } from "../../firebase";
+
 const Modal = ({ modalState, changeModalState }) => {
+  const { currentUser } = useAuth();
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState(null);
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+  };
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const handleClick = () => {
     setTimeout(() => {
       changeModalState();
     }, 400);
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const imageRef = storageRef.child(image.name);
+    await imageRef.put(image);
+    const imageUrl = await imageRef.getDownloadURL();
+    const postsRef = firestore.collection("posts");
+    await postsRef.add({
+      content,
+      imageUrl,
+      userId: currentUser.uid,
+      createdAt: new Date(),
+    });
+    setContent("");
+    setImage(null);
+  };
+
   return (
     <div
       className={`${
@@ -32,7 +62,9 @@ const Modal = ({ modalState, changeModalState }) => {
             <RxCross2 size={20} />
           </span>
         </p>
-        <form className="flex flex-col justify-center items-center w-full gap-5">
+        <form
+          className="flex flex-col justify-center items-center w-full gap-5"
+          onSubmit={handleSubmit}>
           <textarea
             name="postDetails"
             id="post"
@@ -40,7 +72,8 @@ const Modal = ({ modalState, changeModalState }) => {
             rows="8"
             maxLength={200}
             placeholder="What's on your mind?"
-            className="bg-blue-100/10 w-full text-[17px] border-[1px] resize-none focus:outline-blue-200 p-2 border-gray-200 rounded-md"></textarea>
+            className="bg-blue-100/10 w-full text-[17px] border-[1px] resize-none focus:outline-blue-200 p-2 border-gray-200 rounded-md"
+            onChange={handleContentChange}></textarea>
           <div className="border-[1px] border-gray-200 rounded-md w-full h-[3.5rem] flex justify-start items-center px-10 gap-10">
             <span className="font-[500] flex-1 min-w-[10rem]">
               Add to your post
@@ -49,7 +82,13 @@ const Modal = ({ modalState, changeModalState }) => {
               <span>
                 <IoImagesOutline size={27} className="text-green-700" />
               </span>
-              <input type="file" name="image" id="image" hidden />
+              <input
+                type="file"
+                name="image"
+                id="image"
+                hidden
+                onChange={handleImageChange}
+              />
             </label>
             <span>
               <BsEmojiHeartEyes size={25} className="text-yellow-400" />

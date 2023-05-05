@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   let schema = yup.object().shape({
     email: yup.string().email().required("Email is required."),
@@ -24,8 +24,9 @@ const LoginPage = () => {
       await login(formik.values.email, formik.values.password)
         .then(() => {
           setLoading(false);
+          navigate("/");
+
           setTimeout(() => {
-            navigate("/");
             const toastId = "alert";
             const existingToast = toast.isActive(toastId);
 
@@ -56,7 +57,6 @@ const LoginPage = () => {
           }, 1000);
         })
         .catch((error) => {
-          console.log("Signup error:", error.message);
           setLoading(false);
           setTimeout(() => {
             const toastId = "alert";
