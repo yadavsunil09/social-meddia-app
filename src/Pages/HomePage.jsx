@@ -51,7 +51,7 @@ const HomePage = () => {
     }
 
     fetchData();
-  }, [currentUser.uid]);
+  }, [currentUser.uid,]);
   return (
     <div>
       <HomeLayout

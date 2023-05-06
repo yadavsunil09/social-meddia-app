@@ -26,7 +26,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useAuth } from "../../context/UserAuthContext";
-
 const PostContainer = ({
   userDetail,
   postDescription,
@@ -61,7 +60,7 @@ const PostContainer = ({
       const profileQuerySnapshot = await getDocs(profileQuery);
 
       const userProfileData = profileQuerySnapshot.docs.map((doc) =>
-        doc.data()
+        doc?.data()
       );
       // setProfilePicture(userProfileData[0].imageUrl);
       setLikes(userProfileData);
@@ -78,6 +77,16 @@ const PostContainer = ({
 
       setComments(commentsData);
       // setCommentText("");
+      // const commentUserCollection = collection(db, "username");
+      // const commentUserQuery = query(
+      //   commentUserCollection,
+      //   where("userId", "==", userId)
+      // );
+      // const commentUserQuerySnapshot = await getDocs(commentUserQuery);
+      // const commentUserData = commentUserQuerySnapshot.docs.map((doc) =>
+      //   doc.data()
+      // );
+      // console.log("comment user dataa", commentUserData);
       // console.log("comments data are", commentsData);
     }
 
@@ -145,6 +154,7 @@ const PostContainer = ({
           onClick={() => {
             setComment(!comment);
           }}
+          title={comments?.length}
           disable={true}
           icon={<BiComment size={25} className="hover:text-green-300" />}
           // title={"Comment"}
@@ -195,18 +205,13 @@ const PostContainer = ({
           </div>
         </form>
       )}
-      <div className="border-t-[1px] border-t-gray-200 p-2 gap-2 flex flex-col justify-start items-start">
-        <div className="flex  flex-col justify-start items-start bg-blue-50 p-1 rounded-lg border-blue-200 border-[1px]">
-          <span className="border-[1px] border-blue-200 px-2 bg-blue-100/70 rounded-lg cursor-pointer">
-            username
-          </span>
-          <div>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui quos
-            expedita nostrum dicta aliquam voluptates, obcaecati, officiis
-            labore iure blanditiis asperiores. Ex perferendis fugiat possimus
-            iste. Alias autem reiciendis illum?
-          </div>
-        </div>
+      <div className="flex flex-col justify-start items-start bg-blue-50 p-1 rounded-lg border-blue-200 border-[1px]">
+        {/* <span className="border-[1px] border-blue-200 px-2 bg-blue-100/70 rounded-lg cursor-pointer">
+          username
+        </span> */}
+        {comments.map((item, index) => (
+          <div key={index}>{item.content}</div>
+        ))}
       </div>
     </div>
   );
