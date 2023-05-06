@@ -77,16 +77,16 @@ const PostContainer = ({
 
       setComments(commentsData);
       // setCommentText("");
-      // const commentUserCollection = collection(db, "username");
-      // const commentUserQuery = query(
-      //   commentUserCollection,
-      //   where("userId", "==", userId)
-      // );
-      // const commentUserQuerySnapshot = await getDocs(commentUserQuery);
-      // const commentUserData = commentUserQuerySnapshot.docs.map((doc) =>
-      //   doc.data()
-      // );
-      // console.log("comment user dataa", commentUserData);
+      const commentUserCollection = collection(db, "username");
+      const commentUserQuery = query(
+        commentUserCollection,
+        where("userId", "==", userId)
+      );
+      const commentUserQuerySnapshot = await getDocs(commentUserQuery);
+      const commentUserData = commentUserQuerySnapshot.docs.map((doc) =>
+        doc.data()
+      );
+      console.log("comment user dataa", commentUserData); 
       // console.log("comments data are", commentsData);
     }
 
@@ -112,7 +112,7 @@ const PostContainer = ({
   };
 
   return (
-    <div className="bg-white py-3 rounded-lg shadow-md border-[1px] border-gray-100 drop-shadow-sm md:w-[80%] min-w-[30rem] w-[60%] md:min-w-[37rem] min-h-[37rem] h-auto">
+    <div className="bg-white py-3 rounded-lg shadow-md border-[1px] border-gray-100 d rop-shadow-sm md:w-[80%] min-w-[30rem] w-[60%] md:min-w-[37rem] min-h-[37rem] h-auto">
       {/* post details -- username --image */}
       <p className="flex justify-start items-center h-10 overflow-hidden gap-3 p-3">
         <Button
@@ -206,9 +206,9 @@ const PostContainer = ({
         </form>
       )}
       <div className="flex flex-col justify-start items-start bg-blue-50 p-1 rounded-lg border-blue-200 border-[1px]">
-        {/* <span className="border-[1px] border-blue-200 px-2 bg-blue-100/70 rounded-lg cursor-pointer">
+        <span className="border-[1px] border-blue-200 px-2 bg-blue-100/70 rounded-lg cursor-pointer">
           username
-        </span> */}
+        </span>
         {comments.map((item, index) => (
           <div key={index}>{item.content}</div>
         ))}

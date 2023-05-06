@@ -20,6 +20,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { IoMdAdd } from "react-icons/io";
 const CreateProfile = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -39,74 +40,128 @@ const CreateProfile = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    const userCollection = collection(db, "username");
-    const userQuery = query(userCollection, where("userName", "==", user));
-    const userQuerySnapshot = await getDocs(userQuery);
-    const userQueryForId = query(
-      userCollection,
-      where("userId", "==", currentUser.uid)
-    );
-    const userQuerySnapshotForId = await getDocs(userQueryForId);
-    if (!userQuerySnapshot.empty) {
-      toast.error("Username already exists.", {
-        className: "toast-center",
-        position: "bottom-center",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        closeButton: false,
-        transition: Slide,
-        icon: false,
-      });
-      setLoading(false);
-      return;
-    } else if (userQuerySnapshotForId.docs[0]?.id == currentUser.uid) {
-      const imageRef = ref(
-        storage,
-        `profilePicture/${currentUser.uid}/${uploadImage.name}`
-      );
-      await uploadBytes(imageRef, uploadImage);
-      const imageUrl = await getDownloadURL(imageRef);
-      const userRef = doc(userCollection, currentUser.uid);
-      await updateDoc(userRef, {
-        userName: user,
-        imageUrl: imageUrl,
-      });
-      const toastId = "alert";
-      const existingToast = toast.isActive(toastId);
+    if (user && image) {
+      setLoading(true);
 
-      toast.success("Profile Updated.", {
-        toastId: toastId,
-        className: "toast-center",
-        position: "bottom-center",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        closeButton: false,
-        transition: Slide,
-        icon: false,
-      });
-    } else {
-      if (!user) {
+      const userCollection = collection(db, "username");
+      const userQuery = query(userCollection, where("userName", "==", user));
+      const userQuerySnapshot = await getDocs(userQuery);
+      const userQueryForId = query(
+        userCollection,
+        where("userId", "==", currentUser.uid)
+      );
+      const userQuerySnapshotForId = await getDocs(userQueryForId);
+      if (!userQuerySnapshot.empty) {
+        toast.error("Username already exists.", {
+          className: "toast-center",
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          closeButton: false,
+          transition: Slide,
+          icon: false,
+        });
+        setLoading(false);
+        return;
+      } else if (userQuerySnapshotForId.docs[0]?.id == currentUser.uid) {
+        const imageRef = ref(
+          storage,
+          `profilePicture/${currentUser.uid}/${uploadImage.name}`
+        );
+        await uploadBytes(imageRef, uploadImage);
+        const imageUrl = await getDownloadURL(imageRef);
+        const userRef = doc(userCollection, currentUser.uid);
+        await updateDoc(userRef, {
+          userName: user,
+          imageUrl: imageUrl,
+        });
+        const toastId = "alert";
+        const existingToast = toast.isActive(toastId);
+
+        toast.success("Profile Updated.", {
+          toastId: toastId,
+          className: "toast-center",
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          closeButton: false,
+          transition: Slide,
+          icon: false,
+        });
+
+        setLoading(false);
+        navigate("/");
+        setUser("");
+        setImagePreview(null);
+        setUser("");
+      } else {
+        if (!user) {
+          const toastId = "alert";
+          const existingToast = toast.isActive(toastId);
+
+          if (existingToast) {
+            toast.update(toastId, {
+              render: "Username is required.",
+              autoClose: 1000,
+            });
+          } else {
+            toast.error("Username is required.", {
+              toastId: toastId,
+              className: "toast-center",
+              position: "bottom-center",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              closeButton: false,
+              transition: Slide,
+              icon: false,
+            });
+          }
+        }
+        if (uploadImage) {
+          const imageRef = ref(
+            storage,
+            `profilePicture/${currentUser.uid}/${uploadImage.name}`
+          );
+          await uploadBytes(imageRef, uploadImage);
+          const imageUrl = await getDownloadURL(imageRef);
+          const newUser = doc(userCollection, currentUser.uid);
+          await setDoc(newUser, {
+            userName: user,
+            imageUrl: imageUrl,
+            userId: currentUser.uid,
+          });
+
+          setLoading(false);
+          navigate("/");
+          setUser("");
+          setImagePreview(null);
+          setUser("");
+        }
         const toastId = "alert";
         const existingToast = toast.isActive(toastId);
 
         if (existingToast) {
           toast.update(toastId, {
-            render: "Username is required.",
+            render: "Profile Created.",
             autoClose: 1000,
           });
         } else {
-          toast.error("Username is required.", {
+          toast.success("Profile Created.", {
             toastId: toastId,
             className: "toast-center",
             position: "bottom-center",
@@ -123,50 +178,22 @@ const CreateProfile = () => {
           });
         }
       }
-      if (uploadImage) {
-        const imageRef = ref(
-          storage,
-          `profilePicture/${currentUser.uid}/${uploadImage.name}`
-        );
-        await uploadBytes(imageRef, uploadImage);
-        const imageUrl = await getDownloadURL(imageRef);
-        const newUser = doc(userCollection, currentUser.uid);
-        await setDoc(newUser, {
-          userName: user,
-          imageUrl: imageUrl,
-          userId: currentUser.uid,
-        });
-      }
-      const toastId = "alert";
-      const existingToast = toast.isActive(toastId);
-
-      if (existingToast) {
-        toast.update(toastId, {
-          render: "Profile Created.",
-          autoClose: 1000,
-        });
-      } else {
-        toast.success("Profile Created.", {
-          toastId: toastId,
-          className: "toast-center",
-          position: "bottom-center",
-          autoClose: 1000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          closeButton: false,
-          transition: Slide,
-          icon: false,
-        });
-      }
+    } else {
       setLoading(false);
-      navigate("/");
-      setUser("");
-      setImagePreview(null);
-      setUser("");
+      toast.error("Username is required.", {
+        className: "toast-center",
+        position: "bottom-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        closeButton: false,
+        transition: Slide,
+        icon: false,
+      });
     }
   };
   return (
@@ -222,11 +249,10 @@ const CreateProfile = () => {
         <span onClick={handleSubmit}>
           <Button
             title={`${loading ? "Processing.." : "Continue"}`}
-            icon={<IoLogOutOutline size={25} className="text-red-400" />}
+            icon={<IoMdAdd size={25} className="text-red-400" />}
             border={true}
-            linkname={""}>
-            Logout
-          </Button>
+            linkname={""}
+          />
         </span>
       </form>
     </div>
