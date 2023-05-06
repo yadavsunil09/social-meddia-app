@@ -35,7 +35,14 @@ function App() {
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/createProfile" element={<CreateProfile />} />
+          <Route
+            path="/createProfile"
+            element={
+              <ProtectedRoute>
+                <CreateProfile />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -6,12 +6,19 @@ import {
   MdOutlineVideoLibrary,
   AiOutlineFieldTime,
 } from "react-icons/all";
-import image from "../../assets/react.svg";
-const LeftSider = () => {
+import image from "../../assets/profile.png";
+const LeftSider = ({ user, profile }) => {
   return (
     <aside className="flex flex-col gap-3 overflow-x-hidden overflow-y-auto w-full bg-[#fafafa]">
-      <Button title={"User"} icon={<img src={image} />} linkname="/profile" />
-      <Button title={"Friends"} icon={<FaUserFriends size={25} className=""/>} />
+      <Button
+        title={user ? user : "user"}
+        icon={<img src={profile ? profile : image} />}
+        linkname="/profile"
+      />
+      <Button
+        title={"Friends"}
+        icon={<FaUserFriends size={25} className="" />}
+      />
       <Button
         title={"Most Recent"}
         icon={<MdOutlineRecentActors size={25} />}
