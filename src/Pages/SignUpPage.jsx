@@ -2,22 +2,35 @@ import React, { useState } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useAuth } from "../context/UserAuthContext";
-import { CgSpinner } from "react-icons/all";
+import {
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+  CgSpinner,
+} from "react-icons/all";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 const SignUpPage = () => {
   const { signup } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [eyeToggle, setEyeToggle] = useState(false);
+  const [pass, setPass] = useState("password");
+  const handlePasswordToggle = () => {
+    if (pass === "password") {
+      setPass("text");
+      setEyeToggle(true);
+    } else {
+      setPass("password");
+      setEyeToggle(false);
+    }
+  };
   const navigate = useNavigate();
   let schema = yup.object().shape({
-    // name: yup.string().required("Username is required"),
     email: yup.string().email().required("Email is required."),
     password: yup.string().required("Password is required."),
   });
   const formik = useFormik({
     initialValues: {
-      // name: "",
       email: "",
       password: "",
     },
@@ -60,7 +73,6 @@ const SignUpPage = () => {
         })
         .catch((error) => {
           setLoading(false);
-          // resetForm();
 
           setTimeout(() => {
             const toastId = "alert";
@@ -100,30 +112,10 @@ const SignUpPage = () => {
     <div className="flex justify-center items-center p-10 h-screen">
       <form
         onSubmit={formik.handleSubmit}
-        className="flex flex-col gap-10 justify-center items-center p-5 border-[1px] border-gray-200 min-w-[23rem] md:w-[28rem] min-h-[20rem] rounded-md bg-white">
+        className="flex flex-col gap-10 justify-center items-center p-5 border-[1px] border-gray-200 min-w-[22rem] md:w-[28rem] min-h-[20rem] rounded-md bg-white">
         <h2 className="text-black backdrop-blur-sm p-2 w-full flex justify-center items-center font-[600] capitalize text-[25px] border-b-[1px] border-b-gray-200">
           Create new account
         </h2>
-
-        {/* <label htmlFor="name" className="w-full">
-          <input
-            onChange={formik.handleChange}
-            label="Username"
-            type="text"
-            name="name"
-            id="name"
-            placeholder={
-              formik.touched.name && formik.errors.name
-                ? `${formik.errors.name}`
-                : `Username `
-            }
-            className={`border-[1px] border-gray-400 w-full h-[2.5rem] ${
-              formik.touched.name && formik.errors.name
-                ? "placeholder-red-700 border-red-400"
-                : "placeholder-black/80"
-            } rounded-[0.2rem] px-4 focus:outline-none focus:border-gray-900`}
-          />
-        </label> */}
         <label htmlFor="email" className="w-full">
           <input
             onChange={formik.handleChange}
@@ -143,11 +135,20 @@ const SignUpPage = () => {
             } rounded-[0.2rem] px-4 focus:outline-none focus:border-gray-900`}
           />
         </label>
-        <label htmlFor="password" className="w-full">
+        <label htmlFor="password" className="w-full relative">
+          <span
+            className="absolute right-2 top-2 cursor-pointer"
+            onClick={handlePasswordToggle}>
+            {eyeToggle ? (
+              <AiOutlineEyeInvisible size={25} />
+            ) : (
+              <AiOutlineEye size={25} />
+            )}
+          </span>
           <input
             onChange={formik.handleChange}
             label="Password"
-            type="password"
+            type={pass}
             name="password"
             id="password"
             placeholder={

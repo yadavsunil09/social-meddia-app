@@ -6,7 +6,6 @@ import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../context/UserAuthContext";
 import { storage, db } from "../firebase";
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import {
   getFirestore,
   collection,
@@ -28,12 +27,10 @@ const HomePage = () => {
     async function fetchData() {
       const querySnapshot = await getDocs(collection(db, "posts"));
       const data = querySnapshot.docs.map((doc) => doc);
-      // const userData = userQuerySnapshot.docs.map((doc) => doc.data());
       setUserPostData(data);
       const postdata = querySnapshot.docs.map((doc) => {
-        return doc; // Add the document ID to the returned data object
+        return doc;
       });
-      // console.log(postdata);
       setPostId(postdata);
 
       const profileCollection = collection(db, "username");
@@ -47,7 +44,6 @@ const HomePage = () => {
         doc.data()
       );
       setProfilePicture(userProfileData[0].imageUrl);
-      // console.log(userProfileData);
     }
 
     fetchData();
@@ -61,8 +57,6 @@ const HomePage = () => {
               userPostData.map((postData, index) => {
                 const postId = postData.id;
                 const data = postData.data();
-                // console.log(postId);
-                // console.log("data are", data);
                 return (
                   <PostContainer
                     key={postId}

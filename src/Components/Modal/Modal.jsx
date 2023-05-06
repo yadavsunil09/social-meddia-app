@@ -123,9 +123,13 @@ const Modal = ({ modalState, changeModalState }) => {
     }
   };
 
+  useEffect(() => {
+    document.body.style.overflow = modalState ? "hidden" : "auto";
+  }, [modalState]);
+
   return (
     <div
-      className={`${
+      className={`modal ${
         modalState === false && "hidden"
       } h-screen fixed w-full left-0 top-0 flex justify-center items-center`}>
       <div
