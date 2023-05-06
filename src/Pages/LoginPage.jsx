@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/UserAuthContext";
-import { CgSpinner } from "react-icons/all";
+import {
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+  CgSpinner,
+} from "react-icons/all";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +13,17 @@ import "react-toastify/dist/ReactToastify.css";
 const LoginPage = () => {
   const { login, currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [eyeToggle, setEyeToggle] = useState(false);
+  const [pass, setPass] = useState("password");
+  const handlePasswordToggle = () => {
+    if (pass === "password") {
+      setPass("text");
+      setEyeToggle(true);
+    } else {
+      setPass("password");
+      setEyeToggle(false);
+    }
+  };
   let schema = yup.object().shape({
     email: yup.string().email().required("Email is required."),
     password: yup.string().required("Password is required."),
@@ -119,11 +134,20 @@ const LoginPage = () => {
             } rounded-[0.2rem] px-4 focus:outline-none focus:border-gray-900`}
           />
         </label>
-        <label htmlFor="password" className="w-full">
+        <label htmlFor="password" className="w-full relative">
+          <span
+            className="absolute right-2 top-2 cursor-pointer"
+            onClick={handlePasswordToggle}>
+            {eyeToggle ? (
+              <AiOutlineEyeInvisible size={25} />
+            ) : (
+              <AiOutlineEye size={25} />
+            )}
+          </span>
           <input
             onChange={formik.handleChange}
             label="Password"
-            type="password"
+            type={pass}
             name="password"
             id="password"
             maxLength={15}

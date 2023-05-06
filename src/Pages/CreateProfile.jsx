@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Button from "../Components/Button/Button";
-import { IoLogOutOutline } from "react-icons/io5";
 import { BiImageAdd } from "react-icons/bi";
 import image from "../assets/profile.png";
 import { toast, Slide } from "react-toastify";
@@ -9,13 +8,11 @@ import { useAuth } from "../context/UserAuthContext";
 import { storage, db } from "../firebase";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import {
-  getFirestore,
   collection,
   query,
   where,
   setDoc,
   doc,
-  getDoc,
   getDocs,
   updateDoc,
 } from "firebase/firestore";
@@ -208,7 +205,6 @@ const CreateProfile = () => {
             className="border-[1px] border-gray-200 flex justify-center items-center w-40 h-40 rounded-lg object-contain cursor-pointer"
           />
         </label>
-        {/* <span>{currentUser.email}</span> */}
         <label htmlFor="username" className="w-full">
           <input
             onChange={(event) => {

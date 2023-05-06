@@ -1,28 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar/Navbar";
-import {
-  AiFillHome,
-  FaUserAlt,
-  MdPostAdd,
-  FaUserFriends,
-} from "react-icons/all";
+import { AiFillHome, FaUserAlt, MdPostAdd } from "react-icons/all";
 import RightSider from "../Components/SiderComponents/RightSider";
-import Button from "../Components/Button/Button";
 import LeftSider from "../Components/SiderComponents/LeftSider";
 import { useAuth } from "../context/UserAuthContext";
 import { storage, db } from "../firebase";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  setDoc,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { collection, query, where, getDocs } from "firebase/firestore";
 const HomeLayout = ({ children, title }) => {
   const Links = [
     { label: <AiFillHome size={25} />, linkname: "/", tag: "" },
@@ -32,7 +15,6 @@ const HomeLayout = ({ children, title }) => {
   const [profilePicture, setProfilePicture] = useState("");
   const [userNa, setUserNa] = useState("");
   const { currentUser } = useAuth();
-  // console.log(currentUser);
   useEffect(() => {
     async function fetchData() {
       const profileCollection = collection(db, "username");
@@ -47,7 +29,6 @@ const HomeLayout = ({ children, title }) => {
       );
       setProfilePicture(userProfileData[0].imageUrl);
       setUserNa(userProfileData[0].userName);
-      // console.log("user data", userProfileData);
     }
 
     fetchData();

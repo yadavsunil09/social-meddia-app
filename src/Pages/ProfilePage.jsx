@@ -3,25 +3,14 @@ import HomeLayout from "../Layout/HomeLayout";
 import { useAuth } from "../context/UserAuthContext";
 import Button from "../Components/Button/Button";
 import { FiEdit, HiOutlineMail, IoLogOutOutline } from "react-icons/all";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PostContainer from "../Components/PostContainer/PostContainer";
 import LoadingSkeleton from "../Components/LoadingSkeleton/LoadingSkeleton";
 import { toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { storage, db } from "../firebase";
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { db } from "../firebase";
 import dummyImage from "../assets/profile.png";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  setDoc,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 const ProfilePage = () => {
   const { currentUser, logout } = useAuth();
   const [userPostData, setUserPostData] = useState(null);
