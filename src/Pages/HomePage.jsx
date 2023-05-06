@@ -23,14 +23,18 @@ const HomePage = () => {
   const { currentUser } = useAuth();
   const [userPostData, setUserPostData] = useState(null);
   const [profilePicture, setProfilePicture] = useState("");
-
+  const [postId, setPostId] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const querySnapshot = await getDocs(collection(db, "posts"));
-      const data = querySnapshot.docs.map((doc) => doc.data());
+      const data = querySnapshot.docs.map((doc) => doc);
       // const userData = userQuerySnapshot.docs.map((doc) => doc.data());
       setUserPostData(data);
-      // console.log(data);
+      const postdata = querySnapshot.docs.map((doc) => {
+        return doc; // Add the document ID to the returned data object
+      });
+      // console.log(postdata);
+      setPostId(postdata);
 
       const profileCollection = collection(db, "username");
       const profileQuery = query(
@@ -54,12 +58,17 @@ const HomePage = () => {
         children={
           <div className="flex flex-col justify-center items-center gap-10 bg-[#fafafa]">
             {userPostData !== null ? (
-              userPostData.map((data, index) => {
+              userPostData.map((postData, index) => {
+                const postId = postData.id;
+                const data = postData.data();
+                // console.log(postId);
+                // console.log("data are", data);
                 return (
                   <PostContainer
-                    key={index}
+                    key={postId}
+                    postid={postId}
+                    userDetail={data.userId}
                     userId={data.username}
-                    // userDetail={profilePicture}
                     postDescription={data.content}
                     imageUrl={data.imageUrl}
                   />

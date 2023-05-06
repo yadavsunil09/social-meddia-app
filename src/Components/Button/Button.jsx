@@ -10,9 +10,11 @@ const Button = ({
   textHover,
   border,
   md,
+  ...rest
 }) => {
   return (
     <Link
+      {...rest}
       to={linkname && linkname}
       className={` ${
         border && "border-[1px] border-gray-200 hover:border-gray-200"
