@@ -112,7 +112,7 @@ const SignUpPage = () => {
     <div className="flex justify-center items-center p-10 h-screen">
       <form
         onSubmit={formik.handleSubmit}
-        className="flex flex-col gap-10 justify-center items-center p-5 border-[1px] border-gray-200 min-w-[23rem] md:w-[28rem] min-h-[20rem] rounded-md bg-white">
+        className="flex flex-col gap-10 justify-center items-center p-5 border-[1px] border-gray-200 min-w-[22rem] md:w-[28rem] min-h-[20rem] rounded-md bg-white">
         <h2 className="text-black backdrop-blur-sm p-2 w-full flex justify-center items-center font-[600] capitalize text-[25px] border-b-[1px] border-b-gray-200">
           Create new account
         </h2>

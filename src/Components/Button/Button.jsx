@@ -16,7 +16,7 @@ const Button = ({
     <Link
       {...rest}
       to={linkname && linkname}
-      className={` ${
+      className={`lg:flex-row flex-col ${
         border && "border-[1px] border-gray-200 hover:border-gray-200"
       } hover:border-transparent  min-h-[3rem] max-h-[4rem] w-auto ${
         md && "max-w-[8rem] min-h-[2.5rem]"
@@ -26,7 +26,7 @@ const Button = ({
           : hoverColor
           ? `hover:bg-${hoverColor}`
           : "hover:bg-gray-100"
-      }   font-[500] overflow-hidden`}>
+      }   font-[500] overflow-hidden `}>
       <span
         className={`${
           textHover

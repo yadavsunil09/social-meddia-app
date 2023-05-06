@@ -35,7 +35,7 @@ const HomeLayout = ({ children, title }) => {
   }, [currentUser.uid]);
 
   return (
-    <div className="flex flex-col justify-start items-center bg-[#fafafa] w-full">
+    <div className="body flex flex-col justify-start items-center bg-[#fafafa] w-full">
       <div className="w-full">
         <Navbar links={Links} />
       </div>
