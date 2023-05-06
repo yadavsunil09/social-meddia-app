@@ -136,7 +136,11 @@ const ProfilePage = () => {
                 );
               })
             ) : (
-              <LoadingSkeleton />
+              <>
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+              </>
             )}
           </div>
         </div>

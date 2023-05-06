@@ -51,7 +51,7 @@ const HomePage = () => {
     }
 
     fetchData();
-  }, [currentUser.uid,]);
+  }, [currentUser.uid]);
   return (
     <div>
       <HomeLayout
@@ -75,7 +75,11 @@ const HomePage = () => {
                 );
               })
             ) : (
-              <LoadingSkeleton />
+              <>
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+              </>
             )}
           </div>
         }
