@@ -86,7 +86,7 @@ const PostContainer = ({
       const commentUserData = commentUserQuerySnapshot.docs.map((doc) =>
         doc.data()
       );
-      console.log("comment user dataa", commentUserData); 
+      console.log("comment user dataa", commentUserData);
       // console.log("comments data are", commentsData);
     }
 
@@ -206,9 +206,6 @@ const PostContainer = ({
         </form>
       )}
       <div className="flex flex-col justify-start items-start bg-blue-50 p-1 rounded-lg border-blue-200 border-[1px]">
-        <span className="border-[1px] border-blue-200 px-2 bg-blue-100/70 rounded-lg cursor-pointer">
-          username
-        </span>
         {comments.map((item, index) => (
           <div key={index}>{item.content}</div>
         ))}
