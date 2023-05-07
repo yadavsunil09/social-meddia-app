@@ -23,7 +23,7 @@ const ProfilePage = () => {
       setTimeout(() => {
         navigate("/login");
       }, 200);
-      toast.success("Logged out.", {
+      toast.success("You logged out. See you soon.", {
         className: "toast-center",
         position: "bottom-center",
         autoClose: 1000,
@@ -52,7 +52,7 @@ const ProfilePage = () => {
 
       const userData = userQuerySnapshot.docs.map((doc) => doc.data());
       setUserPostData(userData);
-      setUserCurrent(userData[1].username);
+      setUserCurrent(userData[0]?.username ? userData[0]?.username : "User");
 
       const profileCollection = collection(db, "username");
       const profileQuery = query(
