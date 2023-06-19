@@ -17,7 +17,7 @@ const Navbar = ({ links }) => {
     }
   }
   return (
-    <nav className="bg-[#010101]/80 h-[3.1rem] flex justify-between items-center px-3 fixed z-10 w-full backdrop-blur-[5px]">
+    <nav className="bg-[#010101]/80 h-[3.1rem] flex justify-between items-center px-3 fixed z-10 w-full backdrop-blur-[5px] bottom-10">
       <div className=" w-30">
         <Logo
           icon={<TbBrandWebflow size={30} className="text-red-600" />}
