@@ -25,4 +25,4 @@
 - Start the development server using 'yarn dev'
 # Credits
 
-WTalks is inspired by Facebook.
+This is inspired by Facebook.
