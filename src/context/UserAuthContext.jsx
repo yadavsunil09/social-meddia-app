@@ -33,18 +33,6 @@ export function AuthProvider({ children }) {
     return signOut(auth);
   }
 
-  // function resetPassword(email) {
-  //   return sendPasswordResetEmail(auth, email);
-  // }
-
-  // function updateEmail(email) {
-  //   return currentUser.updateEmail(email);
-  // }
-
-  // function updatePassword(password) {
-  //   return currentUser.updatePassword(password);
-  // }
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);

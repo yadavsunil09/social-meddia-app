@@ -20,7 +20,7 @@ const HomeLayout = ({ children, title }) => {
       const profileCollection = collection(db, "username");
       const profileQuery = query(
         profileCollection,
-        where("userId", "==", currentUser.uid)
+        where("userId", "==", currentUser?.uid)
       );
       const profileQuerySnapshot = await getDocs(profileQuery);
 
@@ -32,11 +32,11 @@ const HomeLayout = ({ children, title }) => {
     }
 
     fetchData();
-  }, [currentUser.uid]);
+  }, [currentUser?.uid]);
 
   return (
-    <div className="body flex flex-col justify-start items-center bg-[#fafafa] w-full">
-      <div className="w-full">
+    <div className="body flex flex-col justify-end items-center bg-[#fafafa] w-full">
+      <div className="w-full flex justify-center items-center bg-red-900">
         <Navbar links={Links} />
       </div>
       <section className="grid text-black relative top-[3.1rem] h-screen w-full order-2 bg-[#fafafa]">

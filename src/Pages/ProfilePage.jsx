@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import HomeLayout from "../Layout/HomeLayout";
 import { useAuth } from "../context/UserAuthContext";
 import Button from "../Components/Button/Button";
@@ -21,6 +21,7 @@ const ProfilePage = () => {
     try {
       await logout();
       setTimeout(() => {
+        localStorage.removeItem("user");
         navigate("/login");
       }, 200);
       toast.success("You logged out. See you soon.", {
@@ -31,10 +32,7 @@ const ProfilePage = () => {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
         theme: "colored",
-        closeButton: false,
-        transition: Slide,
         icon: false,
       });
     } catch (err) {
@@ -52,7 +50,6 @@ const ProfilePage = () => {
 
       const userData = userQuerySnapshot.docs.map((doc) => doc.data());
       setUserPostData(userData);
-      setUserCurrent(userData[0]?.username ? userData[0]?.username : "User");
 
       const profileCollection = collection(db, "username");
       const profileQuery = query(
@@ -64,77 +61,75 @@ const ProfilePage = () => {
       const userProfileData = profileQuerySnapshot.docs.map((doc) =>
         doc.data()
       );
+      setUserCurrent(userProfileData[0].userName);
       setProfilePicture(userProfileData[0].imageUrl);
-      console.log(userProfileData);
     }
 
     fetchData();
   }, [currentUser.uid]);
-
   return (
-    <HomeLayout
-      children={
-        <div className="flex flex-col justify-center items-center h-auto min-h-screen w-full gap-2">
-          <div className="relative flex flex-col lg:flex-row justify-start items-start border-[0px] border-gray-200 h-[35rem] lg:h-[18rem] w-[25rem] sm:w-full gap-2 lg:gap-10 p-2">
-            <div className="bg-blue-100 border-[1px] border-blue-200 w-full left-0 h-[12rem] absolute z-[0] top-[-2rem] rounded-lg">
-              &nbsp;
-            </div>
-            <img
-              src={profilePicture ? profilePicture : dummyImage}
-              alt="Profile"
-              className="relative top-[6rem] bg-gray-100 left-5 h-[10rem] rounded-md min-w-[10rem] p-1 border-[1px] border-gray-200 cursor-pointer hover:border-gray-300"
-            />
-            <div className="flex flex-col justify-start p-2 gap-2 items-start h-auto max-h-[10rem] z-1 relative top-[10rem]">
-              <span>{userCurrent}</span>
-              <div className="flex justify-center items-center">
-                <HiOutlineMail size={25} /> : <span>{currentUser.email}</span>
-              </div>
-            </div>
-            <div className="flex flex-col lg:flex-row gap-4 py-4 relative top-[10rem] w-full justify-start items-start h-auto flex-wrap lg:justify-end lg:items-center">
-              <Button
-                title={"Edit Profile"}
-                icon={<FiEdit size={20} className="text-blue-400" />}
-                border={true}
-                linkname={"/createProfile "}
-              />
-              <span onClick={handleLogout}>
-                <Button
-                  title={"Logout"}
-                  icon={<IoLogOutOutline size={25} className="text-red-400" />}
-                  border={true}
-                  md={true}
-                  linkname={""}
-                />
-              </span>
+    <HomeLayout>
+      <div className="flex flex-col justify-center items-center h-auto min-h-screen w-full gap-2">
+        <div className="relative flex flex-col lg:flex-row justify-start items-start border-[0px] border-gray-200 h-[35rem] lg:h-[18rem] w-[25rem] sm:w-full gap-2 lg:gap-10 p-2">
+          <div className="bg-blue-100 border-[1px] border-blue-200 w-full left-0 h-[12rem] absolute z-[0] top-[-2rem] rounded-lg">
+            &nbsp;
+          </div>
+          <img
+            src={profilePicture ? profilePicture : dummyImage}
+            alt="Profile"
+            className="relative top-[6rem] bg-gray-100 left-5 h-[10rem] rounded-md min-w-[10rem] p-1 border-[1px] border-gray-200 cursor-pointer hover:border-gray-300"
+          />
+          <div className="flex flex-col justify-start p-2 gap-2 items-start h-auto max-h-[10rem] z-1 relative top-[10rem]">
+            <span>{userCurrent}</span>
+            <div className="flex justify-center items-center">
+              <HiOutlineMail size={25} /> : <span>{currentUser.email}</span>
             </div>
           </div>
-          <div className="w-full h-auto flex flex-col justify-center items-center relative gap-20">
-            <h2 className="w-full flex justify-center items-center border-b-[1px] h-10 font-[600] text-[18px]">
-              Your Timeline
-            </h2>
-            {userPostData ? (
-              userPostData.map((data, index) => {
-                return (
-                  <PostContainer
-                    key={index}
-                    userId={data.username}
-                    userDetail={profilePicture}
-                    postDescription={data.content}
-                    imageUrl={data.imageUrl}
-                  />
-                );
-              })
-            ) : (
-              <>
-                <LoadingSkeleton />
-                <LoadingSkeleton />
-                <LoadingSkeleton />
-              </>
-            )}
+          <div className="flex flex-col lg:flex-row gap-4 py-4 relative top-[10rem] w-full justify-start items-start h-auto flex-wrap lg:justify-end lg:items-center">
+            <Button
+              title={"Edit Profile"}
+              icon={<FiEdit size={20} className="text-blue-400" />}
+              border={true}
+              linkname={"/createProfile "}
+            />
+            <span onClick={handleLogout}>
+              <Button
+                title={"Logout"}
+                icon={<IoLogOutOutline size={25} className="text-red-400" />}
+                border={true}
+                md={true}
+                linkname={""}
+              />
+            </span>
           </div>
         </div>
-      }
-    />
+        <div className="w-full h-auto flex flex-col justify-center items-center relative gap-20">
+          <h2 className="w-full flex justify-center items-center border-b-[1px] h-10 font-[600] text-[18px]">
+            Your Timeline
+          </h2>
+          {userPostData ? (
+            userPostData.map((data, index) => {
+              return (
+                <PostContainer
+                  profilePicture={profilePicture && profilePicture}
+                  key={index}
+                  userId={userCurrent}
+                  userDetail={profilePicture}
+                  postDescription={data.content}
+                  imageUrl={data.imageUrl}
+                />
+              );
+            })
+          ) : (
+            <>
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+            </>
+          )}
+        </div>
+      </div>
+    </HomeLayout>
   );
 };
 

@@ -42,7 +42,7 @@ const SignUpPage = () => {
           setTimeout(() => {
             const toastId = "alert";
             const existingToast = toast.isActive(toastId);
-
+            localStorage.setItem("user", formik.values.email);
             if (existingToast) {
               toast.update(toastId, {
                 render: "Sign Up Successful.",
@@ -58,17 +58,13 @@ const SignUpPage = () => {
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "colored",
-                closeButton: false,
-                transition: Slide,
                 icon: false,
               });
             }
-            // resetForm();
 
             setLoading(false);
-            navigate("/createProfile");
+            navigate("/");
           }, 1000);
         })
         .catch((error) => {
@@ -93,10 +89,7 @@ const SignUpPage = () => {
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "colored",
-                closeButton: false,
-                transition: Slide,
                 icon: false,
               });
             }
@@ -169,7 +162,7 @@ const SignUpPage = () => {
             formik.handleSubmit();
           }}
           type="submit"
-          className="border-[1px] flex justify-center items-center border-gray-400 bg-red-700 hover:border-white hover:bg-red-800  text-white text-[20px] font-[600] w-full h-[2.5rem] rounded-[0.2rem] px-4">
+          className="border-[1px] flex justify-center items-center border-gray-400 bg-blue-700 hover:border-white hover:bg-blue-800  text-white text-[20px] font-[600] w-full h-[2.5rem] rounded-[0.2rem] px-4">
           {loading ? (
             <CgSpinner size={28} className="animate-spin duration-100" />
           ) : (

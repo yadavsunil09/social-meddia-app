@@ -10,7 +10,7 @@ import image from "../../assets/profile.png";
 const LeftSider = ({ user, profile }) => {
   return (
     <aside className="flex flex-col gap-3 overflow-x-hidden overflow-y-auto w-full bg-[#fafafa]">
-      <Button
+      {/* <Button
         title={user ? user : "user"}
         icon={<img src={profile ? profile : image} />}
         linkname="/profile"
@@ -24,7 +24,7 @@ const LeftSider = ({ user, profile }) => {
         icon={<MdOutlineRecentActors size={25} />}
       />
       <Button title={"Watch"} icon={<MdOutlineVideoLibrary size={25} />} />
-      <Button title={"Memories"} icon={<AiOutlineFieldTime size={25} />} />
+      <Button title={"Memories"} icon={<AiOutlineFieldTime size={25} />} /> */}
     </aside>
   );
 };

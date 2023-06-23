@@ -37,7 +37,7 @@ const Button = ({
         } rounded-full max-w-[1.6rem] cursor-pointer`}>
         {icon}
       </span>
-      <span className="capitalize flex-1 text-black/80 cursor-pointer">
+      <span className="capitalize flex-1 text-blue-800 cursor-pointer">
         {title}
       </span>
     </Link>

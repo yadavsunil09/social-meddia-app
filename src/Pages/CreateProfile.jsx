@@ -121,10 +121,7 @@ const CreateProfile = () => {
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
-              progress: undefined,
               theme: "colored",
-              closeButton: false,
-              transition: Slide,
               icon: false,
             });
           }
@@ -167,10 +164,7 @@ const CreateProfile = () => {
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            progress: undefined,
             theme: "colored",
-            closeButton: false,
-            transition: Slide,
             icon: false,
           });
         }

@@ -1,31 +1,20 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "../Button/Button";
 import image from "../../assets/profile.png";
-import {
-  AiOutlineLike,
-  BiComment,
-  CiFaceFrown,
-  CiFaceMeh,
-  CiFaceSmile,
-  FaRegHandPeace,
-  FaRegHandshake,
-  RiSendPlane2Fill,
-} from "react-icons/all";
-import { storage, db } from "../../firebase";
+import { AiOutlineHeart, CgComment, IoSend } from "react-icons/all";
+import { db } from "../../firebase";
 import firebase from "firebase/compat/app";
 
 import {
-  getFirestore,
   collection,
   query,
   where,
   setDoc,
   doc,
-  getDoc,
   getDocs,
-  updateDoc,
 } from "firebase/firestore";
 import { useAuth } from "../../context/UserAuthContext";
+import { toast } from "react-toastify";
 const PostContainer = ({
   userDetail,
   postDescription,
@@ -34,7 +23,9 @@ const PostContainer = ({
   postid,
   profilePicture,
 }) => {
+  const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fetchData, setFetchData] = useState(false);
   const handleLike = async (postId, userId) => {
     const profileCollection = collection(db, "likes");
     const profileQuery = query(
@@ -43,69 +34,65 @@ const PostContainer = ({
     );
     const docRef = doc(db, "likes", `${postId}_${userId}`);
     await setDoc(docRef, { postId, userId });
-    console.log(postId, userDetail);
+    setFetchData(!fetchData);
   };
   const { currentUser } = useAuth();
   const [likes, setLikes] = useState([]);
   const [comment, setComment] = useState(false);
   const [commentState, setCommentState] = useState(false);
   const [comments, setComments] = useState([]);
+
+  const fetchPostDetail = useCallback(async () => {
+    const profileCollection = collection(db, "likes");
+    const profileQuery = query(
+      profileCollection,
+      where("postId", "==", postid)
+    );
+    const profileQuerySnapshot = await getDocs(profileQuery);
+
+    const userProfileData = profileQuerySnapshot.docs.map((doc) => doc?.data());
+    setLikes(userProfileData);
+    const commentsCollection = collection(db, "comments");
+    const commentsQuery = query(
+      commentsCollection,
+      where("postId", "==", postid)
+    );
+    const commentsQuerySnapshot = await getDocs(commentsQuery);
+
+    const commentsData = commentsQuerySnapshot.docs.map((doc) => doc.data());
+
+    setComments(commentsData);
+    const commentUserCollection = collection(db, "username");
+    const commentUserQuery = query(
+      commentUserCollection,
+      where("userId", "==", userId)
+    );
+    const commentUserQuerySnapshot = await getDocs(commentUserQuery);
+    const commentUserData = commentUserQuerySnapshot.docs.map((doc) =>
+      doc.data()
+    );
+  }, [postid, userId]);
   useEffect(() => {
-    async function fetchData() {
-      const profileCollection = collection(db, "likes");
-      const profileQuery = query(
-        profileCollection,
-        where("postId", "==", postid)
-      );
-      const profileQuerySnapshot = await getDocs(profileQuery);
+    fetchPostDetail();
+  }, [fetchData]);
 
-      const userProfileData = profileQuerySnapshot.docs.map((doc) =>
-        doc?.data()
-      );
-      // setProfilePicture(userProfileData[0].imageUrl);
-      setLikes(userProfileData);
-      // console.log("data", userProfileData.length);
-
-      const commentsCollection = collection(db, "comments");
-      const commentsQuery = query(
-        commentsCollection,
-        where("postId", "==", postid)
-      );
-      const commentsQuerySnapshot = await getDocs(commentsQuery);
-
-      const commentsData = commentsQuerySnapshot.docs.map((doc) => doc.data());
-
-      setComments(commentsData);
-      // setCommentText("");
-      const commentUserCollection = collection(db, "username");
-      const commentUserQuery = query(
-        commentUserCollection,
-        where("userId", "==", userId)
-      );
-      const commentUserQuerySnapshot = await getDocs(commentUserQuery);
-      const commentUserData = commentUserQuerySnapshot.docs.map((doc) =>
-        doc.data()
-      );
-      console.log("comment user dataa", commentUserData);
-      // console.log("comments data are", commentsData);
-    }
-
-    fetchData();
-  }, [likes, comments]);
-
-  // console.log(comments);
-  const [content, setContent] = useState("");
   const handleComment = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const commentCollection = collection(db, "comments");
-    const newPost = doc(commentCollection);
-    await setDoc(newPost, {
-      content: content,
-      userId: currentUser.uid,
-      postId: postid,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    if (content.length !== 0) {
+      const commentCollection = collection(db, "comments");
+      const newPost = doc(commentCollection);
+      await setDoc(newPost, {
+        content: content,
+        userId: currentUser.uid,
+        postId: postid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      setFetchData(!fetchData);
+    } else {
+      setLoading(false);
+      setFetchData(false);
+    }
   };
   const handleContentChange = (e) => {
     setContent(e.target.value);
@@ -126,7 +113,6 @@ const PostContainer = ({
             />
           }
         />
-        {/* <span>{userId}</span> */}
       </p>
       {/* post description */}
       <p className="p-4 border-b-[1px] border-b-gray-200">{postDescription}</p>
@@ -145,19 +131,18 @@ const PostContainer = ({
             handleLike(postid, currentUser.uid);
           }}
           disable={true}
-          icon={<AiOutlineLike size={25} className="hover:text-blue-500" />}
+          icon={<AiOutlineHeart size={25} className="hover:text-pink-700" />}
           title={likes.length}
           textHover={true}
           textColor={"red-900"}
         />
         <Button
           onClick={() => {
-            setComment(!comment);
+            setComment(true);
           }}
           title={comments?.length}
           disable={true}
-          icon={<BiComment size={25} className="hover:text-green-300" />}
-          // title={"Comment"}
+          icon={<CgComment size={25} className="hover:text-green-700" />}
         />
       </p>
       {comment && (
@@ -169,9 +154,6 @@ const PostContainer = ({
               onClick={() => {
                 setCommentState(true);
               }}
-              onMouseLeave={() => {
-                setCommentState(false);
-              }}
               onChange={handleContentChange}
               name="postDetails"
               id="post"
@@ -180,36 +162,28 @@ const PostContainer = ({
               maxLength={200}
               placeholder="Comment"
               className="bg-blue-100/10 w-full text-[17px] border-[1px] resize-none focus:outline-blue-200 p-2 focus:outline-[1px] border-gray-200 rounded-md"></textarea>
-            <div className="w-full bg-rd-900 h-10 border-[1px] rounded-md border-blue-200 flex justify-between px-5 gap-10 items-center">
-              <div className="flex justify-start items-center gap-5">
-                <span>
-                  <CiFaceSmile size={25} className="text-green-400" />
-                </span>
-                <span>
-                  <CiFaceFrown size={25} className="text-red-500" />
-                </span>
-                <span>
-                  <CiFaceMeh size={25} className="text-yellow-400" />
-                </span>
-                <span>
-                  <FaRegHandshake size={25} className="text-blue-400" />
-                </span>
-                <span>
-                  <FaRegHandPeace size={22} className="text-pink-900" />
-                </span>
-              </div>
-              <button type="submit">
-                <RiSendPlane2Fill size={25} className="hover:text-blue-400" />
-              </button>
-            </div>
+
+            <button
+              type="submit"
+              className="relative right-0 bottom-6 w-full  flex justify-end items-center ">
+              <span className="rounded-md z-10 h-[1.5rem] w-[1.8rem] flex justify-center items-center group hover:bg-blue-100 bg-black/10">
+                <IoSend size={18} className="group-hover:text-blue-900" />
+              </span>
+            </button>
           </div>
         </form>
       )}
-      <div className="flex flex-col justify-start items-start bg-blue-50 p-1 rounded-lg border-blue-200 border-[1px]">
-        {comments.map((item, index) => (
-          <div key={index}>{item.content}</div>
-        ))}
-      </div>
+      {comments.length > 0 && (
+        <div className="flex flex-col justify-start items-start gap-2 px-2 w-full">
+          {comments.map((item, index) => (
+            <div
+              key={index}
+              className="bg-blue-50 p-1 rounded-lg border-blue-200 border-[1px] flex flex-col justify-start items-start w-full">
+              {item.content}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

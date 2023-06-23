@@ -40,33 +40,23 @@ const LoginPage = () => {
         .then(() => {
           setLoading(false);
           navigate("/");
-
+          localStorage.setItem("user", formik?.values?.email);
           setTimeout(() => {
             const toastId = "alert";
             const existingToast = toast.isActive(toastId);
 
-            if (existingToast) {
-              toast.update(toastId, {
-                render: "Welcome to Wtalks.",
-                autoClose: 1000,
-              });
-            } else {
-              toast.success("Welcome to Wtalks.", {
-                toastId: toastId,
-                className: "toast-center",
-                position: "bottom-center",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                closeButton: false,
-                transition: Slide,
-                icon: false,
-              });
-            }
+            toast.success("Login success.", {
+              toastId: toastId,
+              className: "toast-center",
+              position: "bottom-center",
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              theme: "colored",
+              icon: false,
+            });
 
             setLoading(false);
           }, 1000);
@@ -92,10 +82,7 @@ const LoginPage = () => {
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
-                progress: undefined,
                 theme: "colored",
-                closeButton: false,
-                transition: Slide,
                 icon: false,
               });
             }
@@ -169,7 +156,7 @@ const LoginPage = () => {
             formik.handleSubmit();
           }}
           type="submit"
-          className="border-[1px] border-gray-400 flex justify-center items-center bg-red-700 hover:border-white hover:bg-red-800  text-white text-[20px] font-[600] w-full h-[2.5rem] rounded-[0.2rem] px-4">
+          className="border-[1px] border-gray-400 flex justify-center items-center bg-blue-700 hover:border-white hover:bg-blue-800  text-white text-[20px] font-[600] w-full h-[2.5rem] rounded-[0.2rem] px-4">
           {loading ? (
             <CgSpinner size={28} className="animate-spin duration-100" />
           ) : (

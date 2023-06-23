@@ -43,7 +43,7 @@ const Modal = ({ modalState, changeModalState }) => {
     }
 
     fetchData();
-  }, [currentUser.uid]);
+  }, [currentUser?.uid]);
   // to handle change in content
 
   const handleContentChange = (e) => {
@@ -71,7 +71,6 @@ const Modal = ({ modalState, changeModalState }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     // Upload image to Firebase Storage
     try {
       const postCollection = collection(db, "posts");
@@ -138,7 +137,7 @@ const Modal = ({ modalState, changeModalState }) => {
         }}
         className={`${
           modalState === false && "hidden"
-        } h-screen bg-black/60 z-[10] fixed w-full left-0 top-0 flex justify-center items-center`}></div>
+        } h-screen bg-transparent z-[10] fixed w-full left-0 top-0 flex justify-center items-center`}></div>
       <div
         className={`bg-white py-3 rounded-lg z-[10] shadow-md border-[1px] border-gray-100 drop-shadow-sm md:min-w-[35rem]  w-[30rem] md:min-h-[28rem] h-auto p-10 gap-5 flex flex-col`}>
         <p className="flex justify-center items-center p-1 border-b-[1px] border-b-gray-200 text-black/90 font-[500] text-[19px]">
@@ -175,7 +174,7 @@ const Modal = ({ modalState, changeModalState }) => {
           )}
           <div className="border-[1px] border-gray-200 rounded-md w-full h-[3.5rem] flex justify-start items-center px-10 gap-10">
             <span className="font-[500] flex-1 min-w-[10rem]">
-              Add to your post
+              Upload Photo
             </span>
             <label htmlFor="image" className="cursor-pointer">
               <span>
@@ -189,14 +188,11 @@ const Modal = ({ modalState, changeModalState }) => {
                 onChange={handleImageChange}
               />
             </label>
-            <span>
-              <BsEmojiHeartEyes size={25} className="text-yellow-400" />
-            </span>
           </div>
           <button
             type="submit"
-            className={`w-full bg-red-700 hover:bg-red-800 font-[600] text-[18px] text-white h-10 rounded-md ${
-              loading && "opacity-80 bg-red-800"
+            className={`w-full bg-blue-700 hover:bg-blue-800 font-[600] text-[18px] text-white h-10 rounded-md ${
+              loading && "opacity-80 bg-blue-800"
             }`}>
             {loading ? "Posting" : "Post"}
           </button>

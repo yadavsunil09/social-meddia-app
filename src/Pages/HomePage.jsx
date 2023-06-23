@@ -26,9 +26,9 @@ const HomePage = () => {
   useEffect(() => {
     async function fetchData() {
       const querySnapshot = await getDocs(collection(db, "posts"));
-      const data = querySnapshot.docs.map((doc) => doc);
+      const data = querySnapshot?.docs?.map((doc) => doc);
       setUserPostData(data);
-      const postdata = querySnapshot.docs.map((doc) => {
+      const postdata = querySnapshot?.docs?.map((doc) => {
         return doc;
       });
       setPostId(postdata);
@@ -36,48 +36,46 @@ const HomePage = () => {
       const profileCollection = collection(db, "username");
       const profileQuery = query(
         profileCollection,
-        where("userId", "==", currentUser.uid)
+        where("userId", "==", currentUser?.uid)
       );
       const profileQuerySnapshot = await getDocs(profileQuery);
 
-      const userProfileData = profileQuerySnapshot.docs.map((doc) =>
+      const userProfileData = profileQuerySnapshot?.docs?.map((doc) =>
         doc.data()
       );
-      setProfilePicture(userProfileData[0].imageUrl);
+      setProfilePicture(userProfileData[0]?.imageUrl);
     }
 
     fetchData();
-  }, [currentUser.uid]);
+  }, [currentUser?.uid]);
   return (
     <div>
-      <HomeLayout
-        children={
-          <div className="flex flex-col justify-center items-center gap-10 bg-[#fafafa]">
-            {userPostData !== null ? (
-              userPostData.map((postData, index) => {
-                const postId = postData.id;
-                const data = postData.data();
-                return (
-                  <PostContainer
-                    key={postId}
-                    postid={postId}
-                    userDetail={data.userId}
-                    userId={data.username}
-                    postDescription={data.content}
-                    imageUrl={data.imageUrl}
-                  />
-                );
-              })
-            ) : (
-              <>
-                <LoadingSkeleton />
-                <LoadingSkeleton />
-                <LoadingSkeleton />
-              </>
-            )}
-          </div>
-        }
-      />
+      <HomeLayout>
+        <div className="flex flex-col justify-center items-center gap-10 bg-[#fafafa] relative top-5">
+          {userPostData !== null ? (
+            userPostData.map((postData) => {
+              const postId = postData.id;
+              const data = postData.data();
+              return (
+                <PostContainer
+                  key={postId}
+                  postid={postId}
+                  userDetail={data.userId}
+                  userId={data.username}
+                  postDescription={data.content}
+                  imageUrl={data.imageUrl}
+                />
+              );
+            })
+          ) : (
+            <>
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+              <LoadingSkeleton />
+            </>
+          )}
+        </div>
+      </HomeLayout>
     </div>
   );
 };
