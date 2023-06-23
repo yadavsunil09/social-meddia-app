@@ -1,4 +1,4 @@
-# Wtalks 
+# Social-media-app
 Wtalks is a social media web app built using Firebase Authentication, Firebase Database, Firebase Store, React, and Tailwindcss.
 
 # Features
